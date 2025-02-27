@@ -1,0 +1,18 @@
+<nb-layout>
+  <nb-layout-header>
+    <div class="page-header-content">
+      <div>
+        <nb-icon icon="menu" (click)="handleClickMenuToggle()"></nb-icon>
+      </div>
+      <div>{{userInfo.username}}</div>
+    </div>
+  </nb-layout-header>
+
+  <nb-sidebar left #sidebar id="page-menu-column">
+    <nb-menu tag="menu-sidebar" [items]="menuItems">
+    </nb-menu>
+  </nb-sidebar>
+  <nb-layout-column id="page-content-column">
+    <router-outlet></router-outlet>
+  </nb-layout-column>
+</nb-layout>

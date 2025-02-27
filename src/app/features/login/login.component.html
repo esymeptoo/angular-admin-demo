@@ -1,0 +1,14 @@
+<form
+  class="login-container"
+  [formGroup]="loginForm"
+  (ngSubmit)="onSubmit()"
+>
+  <h1>登录</h1>
+  <div class="login-input">
+    <input formControlName="username" type="text" nbInput>
+  </div>
+  <div class="login-input">
+    <input formControlName="password" type="text" nbInput>
+  </div>
+  <button status="primary" type="submit" nbButton [nbSpinner]="loading">Login</button>
+</form>

@@ -1,0 +1,25 @@
+:host {
+  #page-menu-column {
+    padding: 0;
+    /*flex: 0 0 200px;*/
+
+    .main-container {
+      width: 100% !important;
+    }
+
+    .page-menu {
+      /*padding: 12px;*/
+    }
+  }
+
+  #page-content-column {
+    padding: 12px;
+    flex: 1 0 0;
+  }
+
+  .page-header-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}

@@ -10,5 +10,7 @@ import { ThemeModule } from '@theme/theme.module';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'angular-demo';
+  constructor() {
+
+  }
 }

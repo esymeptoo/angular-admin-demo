@@ -5,13 +5,12 @@ import { UserApiService } from 'services/apis/user-api/user-api.service';
 import { IUserInfo } from 'services/apis/user-api/user-api.service';
 import { Permissions } from '../../app.routes';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  constructor(private userApiService: UserApiService ) { }
+  constructor(private userApiService: UserApiService) { }
 
   userInfo!: IUserInfo;
 
@@ -20,11 +19,11 @@ export class UserService {
       .pipe(
         tap((res) => {
           this.userInfo = res;
-        })
+        }),
       );
   }
 
   hasPermission(permission: Permissions) {
-    return this.userInfo.permissions.includes(permission);
+    return this.userInfo?.permissions?.includes(permission);
   }
 }

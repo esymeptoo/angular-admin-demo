@@ -21,7 +21,6 @@ const AuthInterceptor = (req: HttpRequest<any>, next: HttpHandlerFn) => {
   return next(req)
     .pipe(
       catchError((err: HttpErrorResponse) => {
-        console.log(err);
         if (err.status === 401) {
           localStorage.removeItem('angular-demo-system-token');
           authService.handleUnAuthorizationError();

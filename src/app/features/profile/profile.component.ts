@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NbToastrService } from '@nebular/theme';
 
 @Component({
   selector: 'app-profile',
@@ -10,6 +11,12 @@ import { Component } from '@angular/core';
   `,
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent {
+export class ProfileComponent implements OnInit {
+  constructor(private toastService: NbToastrService) {
 
+  }
+
+  ngOnInit() {
+    this.toastService.show('Success', 'xxx');
+  }
 }

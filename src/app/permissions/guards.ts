@@ -1,5 +1,6 @@
 import { CanActivateFn, Route, Router } from '@angular/router';
 import { inject } from '@angular/core';
+import { Subject } from 'rxjs';
 
 import { UserService } from 'services/user/user.service';
 import { AuthService } from 'services/auth.service';
@@ -11,13 +12,25 @@ export type ZRoute = Omit<Route, 'children'> & Partial<Omit<NbMenuItem, 'childre
   children?: ZRoute[];
 };
 
+let hasMainRouteVisited = false;
+
+const mainRedirectSubject = new Subject();
+const mainRedirectSubject$ = mainRedirectSubject.asObservable();
+
 export const permissionGuards: (permission: Permissions) => CanActivateFn = (permission) => {
   return () => {
     const userService = inject(UserService);
     const authService = inject(AuthService);
 
-    if (userService.hasPermission(permission)) return true;
-    authService.handleAccessDenied();
+    if (userService.hasPermission(permission)) {
+      hasMainRouteVisited = true;
+      return true;
+    }
+    if (!hasMainRouteVisited) {
+      mainRedirectSubject.next(true);
+    } else {
+      authService.handleAccessDenied();
+    }
     return false;
   }
 }
@@ -37,26 +50,22 @@ const getFirstAccessMenu = (routes: ZRoute[], userService: UserService) => {
   }
 }
 
-let hasMainRouteVisited = false;
-
 export const mainGuards: (routes: any[]) => CanActivateFn = (routes) => (route) => {
   const userService = inject(UserService);
   const authService = inject(AuthService);
   const router = inject(Router);
-
-  if (route.firstChild) {
-    const validMenu = getFirstAccessMenu(routes, userService);
-    if (validMenu) {
-      if (!hasMainRouteVisited) {
+  mainRedirectSubject$.subscribe(() => {
+    if (!hasMainRouteVisited) {
+      const validMenu = getFirstAccessMenu(routes, userService);
+      if (validMenu) {
         router.navigateByUrl(validMenu.link, {
           replaceUrl: true,
         })
       }
       hasMainRouteVisited = true;
-      return true;
+    } else {
+      authService.handleAccessDenied();
     }
-    authService.handleAccessDenied();
-    return false;
-  }
+  });
   return true;
 }

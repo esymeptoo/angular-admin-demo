@@ -1,0 +1,22 @@
+:host {
+  height: 100%;
+  /*display: flex;*/
+  /*flex-direction: column;*/
+}
+
+
+.table-container {
+  max-height: calc(100% - 56px);
+  overflow: auto;
+  width: 100%;
+  background: #FFFFFF;
+}
+
+.mat-mdc-header-cell {
+  text-wrap: nowrap;
+}
+
+.mat-mdc-cell {
+  text-wrap: nowrap;
+
+}

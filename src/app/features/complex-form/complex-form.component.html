@@ -1,0 +1,52 @@
+<div [nbSpinner]="loading" style="min-height: 200px">
+  <ng-container *ngIf="form">
+    <form
+      class="login-container"
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+    >
+      <h1>个人信息收集</h1>
+      <div>
+        <mat-form-field>
+          <mat-label>姓名</mat-label>
+          <input matInput type="text" formControlName="name" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field>
+          <mat-label>年龄</mat-label>
+          <input matInput type="number" formControlName="age" />
+        </mat-form-field>
+      </div>
+
+      <div>
+        <label>性别</label>
+        <mat-radio-group aria-label="Select an option" formControlName="gender">
+          <mat-radio-button [value]="1">男</mat-radio-button>
+          <mat-radio-button [value]="0">女</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div *ngIf="form.get('gender')?.value === 1">
+        <label>是否骑行</label>
+        <mat-radio-group aria-label="Select an option" formControlName="isCycling">
+          <mat-radio-button [value]="1">是</mat-radio-button>
+          <mat-radio-button [value]="0">否</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div *ngIf="form.get('gender')?.value === 1 && form.get('isCycling')?.value === 1">
+        <mat-form-field>
+          <mat-label>车牌</mat-label>
+          <input matInput type="text" formControlName="bikeBrandName" />
+        </mat-form-field>
+      </div>
+      <div>
+        <label>爱好</label>
+        <app-hobbies [form]="form"></app-hobbies>
+      </div>
+      <div>
+        <button status="primary" type="submit" nbButton [nbSpinner]="false" [disabled]="!form.valid">提交</button>
+      </div>
+    </form>
+  </ng-container>
+</div>

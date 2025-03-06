@@ -1,7 +1,31 @@
 import { Component, OnInit } from '@angular/core';
 import { NgIf } from '@angular/common';
-import { FormsModule, FormGroup, FormBuilder, ReactiveFormsModule, Validators, AbstractControl } from '@angular/forms';
-import { take, finalize, of, debounceTime, switchMap, catchError, Observable, mergeMap, distinctUntilChanged, tap, Subject, BehaviorSubject } from 'rxjs';
+import {
+  FormsModule,
+  FormGroup,
+  FormBuilder,
+  ReactiveFormsModule,
+  Validators,
+  AbstractControl,
+  AsyncValidatorFn,
+  ValidationErrors
+} from '@angular/forms';
+import {
+  takeLast,
+  take,
+  finalize,
+  of,
+  debounceTime,
+  switchMap,
+  catchError,
+  Observable,
+  mergeMap,
+  distinctUntilChanged,
+  tap,
+  Subject,
+  BehaviorSubject,
+  first,
+} from 'rxjs';
 import { Router } from '@angular/router';
 // @ts-ignore
 import debounce from 'lodash.debounce';
@@ -23,7 +47,6 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   loading = false;
 
-  private usernameSubject = new BehaviorSubject<string>('');
   constructor(private formBuilder: FormBuilder, private userApiService: UserApiService, private router: Router) {
 
   }
@@ -31,7 +54,9 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     this.loading = true;
     this.userApiService.login(this.loginForm.value)
-      .pipe(finalize(() => { this.loading = false; }))
+      .pipe(finalize(() => {
+        this.loading = false;
+      }))
       .subscribe((res) => {
         // @ts-ignore
         localStorage.setItem('angular-demo-system-token', res?.token);
@@ -42,13 +67,27 @@ export class LoginComponent implements OnInit {
       })
   }
 
-  usernameAsyncValidator = (control: any) => {
-    return of(control.value).pipe(
-      debounceTime(3500),  // 延迟3500ms
-      switchMap((username) => this.checkUsernameAvailability(username)),  // 执行异步请求
-      catchError(() => of(null))  // 防止错误中断流
-    );
-  };
+  handleInputChange = (e: any) => {
+    console.log(e.target.value, this.loginForm.get('username'));
+  }
+
+  usernameAsyncValidator(): AsyncValidatorFn {
+    return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      if (control.value === '') {
+        return of(null);
+      }
+      return control.valueChanges.pipe(
+        // 防抖时间，单位毫秒
+        debounceTime(1000),
+        // 过滤掉重复的元素
+        distinctUntilChanged(),
+        // 调用服务, 获取结果
+        switchMap((username) => this.checkUsernameAvailability(username)),
+        catchError(() => of(null)),  // 防止错误中断流
+        first(),
+      );
+    };
+  }
 
   checkUsernameAvailability(username: string): Observable<any> {
     // 模拟API请求：用户名 "admin" 已被注册
@@ -71,7 +110,7 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group(({
-      username: ['', [Validators.required, Validators.minLength(3)], this.usernameAsyncValidator],
+      username: ['', [Validators.required, Validators.minLength(3)], this.usernameAsyncValidator()],
       password: '',
     }), {
       validators: [

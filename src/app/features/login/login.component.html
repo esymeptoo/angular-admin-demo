@@ -6,7 +6,8 @@
   >
     <h1>登录</h1>
     <div class="login-input">
-      <input formControlName="username" type="text" nbInput>
+      <input formControlName="username" type="text" nbInput (change)="handleInputChange($event)">
+      <div *ngIf="loginForm.get('username')?.status === 'PENDING'">In Validating...</div>
       <div *ngIf="loginForm.get('username')?.getError('required')" class="error-message text-danger">
        username is required!
       </div>

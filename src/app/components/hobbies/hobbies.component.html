@@ -1,0 +1,16 @@
+<div>
+  <div *ngFor="let hobbyControl of toArray(hobbiesArray); let i = index" [formGroup]="hobbyControl">
+    <div>
+      <mat-form-field>
+        <mat-label>爱好 {{ i + 1 }}</mat-label>
+        <input matInput formControlName="text" placeholder="请输入爱好" />
+        <mat-error *ngIf="hobbyControl.get('text')?.hasError('required')">
+          爱好是必填项
+        </mat-error>
+      </mat-form-field>
+      <button nbButton status="danger" (click)="handleDelete(i)" [disabled]="hobbiesArray.length === 1">删除</button>
+    </div>
+  </div>
+
+  <button nbButton status="primary" type="button" (click)="handleAdd()">添加爱好</button>
+</div>

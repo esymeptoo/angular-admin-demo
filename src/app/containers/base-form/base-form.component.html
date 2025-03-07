@@ -1,0 +1,36 @@
+<ng-container *ngIf="!!form">
+  <form [formGroup]="form" (submit)="handleSubmit()" [nbSpinner]="loading">
+    @for(item of formItems; track $index) {
+      <ng-container [ngSwitch]="item.type">
+        <ng-container *ngIf="!formItemsProps[item.formProps.name]['isHidden']">
+          <div *ngSwitchCase="FormItemType.Input" >
+            <label for="">{{item.formProps['label']}}</label>
+            <input
+              nbInput
+              type="text"
+              [formControlName]="item.formProps.name"
+              [fullWidth]="true"
+              [status]="formItemsProps[item.formProps.name]['status'] || ''"
+              [placeholder]="formItemsProps[item.formProps.name]['placeholder'] || ''"
+            >
+          </div>
+          <div *ngSwitchCase="FormItemType.Select" >
+            <label for="">{{item.formProps['label']}}</label>
+            <nb-select
+              [formControlName]="item.formProps.name"
+              [placeholder]="formItemsProps[item.formProps.name]['placeholder'] || ''"
+              [fullWidth]="true"
+            >
+              @for(element of (item.itemProps?.['options'] || []); track $index) {
+                <nb-option [value]="element['value']">{{element['label']}}</nb-option>
+              }
+            </nb-select>
+          </div>
+          <div *ngIf="errorMessage[item.formProps.name]" class="text-danger">{{errorMessage[item.formProps.name]}}</div>
+        </ng-container>
+      </ng-container>
+    }
+    <button nbButton type="reset">清空</button>
+    <button nbButton status="primary" type="submit" [disabled]="!form.valid">提交</button>
+  </form>
+</ng-container>

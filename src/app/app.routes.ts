@@ -12,6 +12,8 @@ import { SettingsMainComponent } from 'features/settings/settings-main/settings-
 import { SettingsOneComponent } from 'features/settings/settings-one/settings-one.component';
 import { SettingsTwoComponent } from 'features/settings/settings-two/settings-two.component';
 
+import { DynamicFormComponent } from 'features/dynamic-form/dynamic-form.component';
+
 import { NotFoundComponent } from 'features/not-found/not-found.component';
 import { permissionGuards, mainGuards, ZRoute } from 'permissions/guards';
 
@@ -23,6 +25,7 @@ export enum Permissions {
   SETTING = 'SETTING',
   SETTING_ONE = 'SETTING_ONE',
   SETTING_TWO = 'SETTING_TWO',
+  DYNAMIC_FORM = 'DYNAMIC_FORM',
 }
 
 export const mainRoutes: ZRoute[] = [
@@ -96,6 +99,16 @@ export const mainRoutes: ZRoute[] = [
         canActivate: [permissionGuards(Permissions.SETTING_TWO)],
       },
     ],
+  },
+  {
+    title: '动态表单',
+    path: 'dynamic-form',
+    icon: 'person-outline',
+    component: DynamicFormComponent,
+    pathMatch: 'prefix',
+    link: '/dynamic-form',
+    // permission: Permissions.DYNAMIC_FORM,
+    // canActivate: [permissionGuards(Permissions.DYNAMIC_FORM)],
   },
   {
     path: '**',

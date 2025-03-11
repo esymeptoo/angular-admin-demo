@@ -32,6 +32,7 @@ export class BaseFormComponent implements OnInit, OnChanges {
   FormItemType = FormItemType;
   form!: FormGroup;
   formItemsProps: Record<string, Record<string, any> & { isHidden?: boolean }> = {};
+  hideMap: Map<string, { prev: boolean; current: boolean }> = new Map();
   constructor(private formBuilder: FormBuilder, private cdr: ChangeDetectorRef) {
     // this.cdr.detach();
   }
@@ -82,11 +83,15 @@ export class BaseFormComponent implements OnInit, OnChanges {
         hideWhen,
       } = b;
       const hidden = hideWhen?.(this.form) || false;
+      this.hideMap.set(name, {
+        prev: hidden,
+        current: hidden,
+      });
       return {
         ...a,
         [name]: {
           // 同上
-          ..._.omit((itemProps || {}), ['disabled']),
+          ..._.omit((itemProps || {}), 'disabled'),
           ...propsGetter(this.form),
           isHidden: hidden,
         },
@@ -108,12 +113,18 @@ export class BaseFormComponent implements OnInit, OnChanges {
           ...props,
           isHidden: hidden,
         }
+        this.hideMap.set(name, {
+          prev: !!this.hideMap.get(name)?.current,
+          current: hidden,
+        });
         this.handleHideAndShow(name, hidden, defaultValue);
       });
     });
   }
 
   handleHideAndShow(name: string, hide: boolean, defaultValue: unknown) {
+    const { prev, current } = this.hideMap.get(name) || {};
+    if (prev === current) return;
     const control = this.form.get(name);
     if (!control) return;
     control.clearValidators();

@@ -20,6 +20,7 @@
               [formControlName]="item.formProps.name"
               [placeholder]="formItemsProps[item.formProps.name]['placeholder'] || ''"
               [fullWidth]="true"
+              
             >
               @for(element of (item.itemProps?.['options'] || []); track $index) {
                 <nb-option [value]="element['value']">{{element['label']}}</nb-option>

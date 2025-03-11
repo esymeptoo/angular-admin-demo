@@ -13,6 +13,7 @@ import { SettingsOneComponent } from 'features/settings/settings-one/settings-on
 import { SettingsTwoComponent } from 'features/settings/settings-two/settings-two.component';
 
 import { DynamicFormComponent } from 'features/dynamic-form/dynamic-form.component';
+import { JspdfComponent } from 'features/jspdf/jspdf.component';
 
 import { NotFoundComponent } from 'features/not-found/not-found.component';
 import { permissionGuards, mainGuards, ZRoute } from 'permissions/guards';
@@ -107,8 +108,14 @@ export const mainRoutes: ZRoute[] = [
     component: DynamicFormComponent,
     pathMatch: 'prefix',
     link: '/dynamic-form',
-    // permission: Permissions.DYNAMIC_FORM,
-    // canActivate: [permissionGuards(Permissions.DYNAMIC_FORM)],
+  },
+  {
+    title: 'PDF下载',
+    path: 'pdf-download',
+    icon: 'person-outline',
+    component: JspdfComponent,
+    pathMatch: 'prefix',
+    link: '/pdf-download',
   },
   {
     path: '**',

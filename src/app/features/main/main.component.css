@@ -20,6 +20,7 @@
     background: #fff;
     height: calc(100vh - 76px - 32px);
     box-sizing: border-box;
+    overflow-y: auto;
   }
 
   .page-header-content {

@@ -15,6 +15,11 @@ import { SettingsTwoComponent } from 'features/settings/settings-two/settings-tw
 import { DynamicFormComponent } from 'features/dynamic-form/dynamic-form.component';
 import { JspdfComponent } from 'features/jspdf/jspdf.component';
 
+import { MultipleMenuComponent } from 'features/multiple-menu/multiple-menu.component';
+import { SecondMenuComponent } from 'features/multiple-menu/containers/second-menu/second-menu.component';
+import { ThirdMenuComponent } from 'features/multiple-menu/containers/third-menu/third-menu.component';
+import { FourthMenuComponent } from 'features/multiple-menu/containers/fourth-menu/fourth-menu.component';
+
 import { NotFoundComponent } from 'features/not-found/not-found.component';
 import { permissionGuards, mainGuards, ZRoute } from 'permissions/guards';
 
@@ -76,7 +81,6 @@ export const mainRoutes: ZRoute[] = [
     icon: 'settings-outline',
     component: SettingsMainComponent,
     pathMatch: 'prefix',
-    link: '/settings',
     permission: Permissions.SETTING,
     children: [
       {
@@ -116,6 +120,32 @@ export const mainRoutes: ZRoute[] = [
     component: JspdfComponent,
     pathMatch: 'prefix',
     link: '/pdf-download',
+  },
+  {
+    path: 'first-menu',
+    title: '一级菜单',
+    icon: 'settings-outline',
+    component: MultipleMenuComponent,
+    pathMatch: 'prefix',
+    children: [
+      {
+        path: 'second',
+        title: '二级菜单',
+        icon: 'person-outline',
+        component: SecondMenuComponent,
+        pathMatch: 'prefix',
+        link: '/first-menu/second',
+      },
+      {
+        path: 'second/detail/:id',
+        title: '三级菜单',
+        component: ThirdMenuComponent,
+        pathMatch: 'prefix',
+        icon: 'person-outline',
+        hidden: true,
+        parentPath: 'second',
+      },
+    ],
   },
   {
     path: '**',

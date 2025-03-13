@@ -13,6 +13,20 @@
     </nb-menu>
   </nb-sidebar>
   <nb-layout-column id="page-content-column">
-    <router-outlet></router-outlet>
+    <div class="breadcrumb-row" *ngIf="!!breadcrumbs.length">
+      <ul>
+        @for (item of breadcrumbs; track item.path) {
+          @if ($index !== 0) {
+            <nb-icon icon="arrow-ios-forward-outline"></nb-icon>
+          }
+          <a (click)="handleBreadcrumbItemClick(item.fullPath, $index)" [class]="{ disabled: $index === 0 || $index === breadcrumbs.length - 1 }">
+            <li>{{item.title}}</li>
+          </a>
+        }
+      </ul>
+    </div>
+    <div>
+      <router-outlet></router-outlet>
+    </div>
   </nb-layout-column>
 </nb-layout>

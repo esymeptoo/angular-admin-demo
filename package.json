@@ -23,6 +23,8 @@
     "@nebular/eva-icons": "^15.0.0",
     "@nebular/theme": "^15.0.0",
     "jspdf": "^3.0.0",
+    "lodash": "^4.17.21",
+    "path-to-regexp": "^8.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

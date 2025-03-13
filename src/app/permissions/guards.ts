@@ -9,7 +9,9 @@ import { Permissions } from '../app.routes';
 
 export type ZRoute = Omit<Route, 'children'> & Partial<Omit<NbMenuItem, 'children'>> & {
   permission?: Permissions;
+  menuHidden?: boolean;
   children?: ZRoute[];
+  parentPath?: string;
 };
 
 let hasMainRouteVisited = false;
